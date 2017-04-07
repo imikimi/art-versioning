@@ -1,0 +1,54 @@
+import &ArtStandardLib, &ArtClassSystem
+
+realRequire = eval 'require'
+
+class Versioning extends BaseClass
+  @initalVersion: "0.0.1"
+
+  @parse: (version) ->
+    [major, minor, patch] = version.split "."
+    major: major | 0
+    minor: minor | 0
+    patch: patch | 0
+
+  @combine: ({major, minor, patch}, dev) ->
+    if dev
+      compactFlatten []
+        major
+        "+" + dev.major if dev.major
+        "."
+        minor
+        "+" + dev.minor if dev.minor
+        "."
+        patch
+        "+" + dev.patch if dev.patch
+      .join ''
+    else
+      "#{major}.#{minor}.#{patch}"
+
+  @normalize: (versionProps) =>
+    {version, development, release} = versionProps
+    version ||= if release
+      @combine release
+    else
+      @initalVersion
+
+    development ||= @parse "0.0.0"
+    release ||= @parse version
+    version: version
+    release: release
+    development: development
+    combined: @combine release, development
+
+  @getCurrent: =>
+    @normalize try
+      realRequire &path.join process.cwd(), "version"
+    catch
+      try
+        version:
+          JSON.parse
+            &fs.readFileSync "package.json"
+            .toString()
+          .version
+      catch
+        @initalVersion

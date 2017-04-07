@@ -1,0 +1,47 @@
+
+{Version} = Neptune.Art.Versioning
+
+devMajor = major: 9, minor: 8, patch: 7
+devMinor = major: 0, minor: 8, patch: 7
+devPatch = major: 0, minor: 0, patch: 7
+
+suite:
+  constructors: ->
+    test "new Version", ->
+      v = new Version
+      assert.eq v.major, 0, "major"
+      assert.eq v.minor, 0, "minor"
+      assert.eq v.patch, 0, "patch"
+
+    test "new Version '1.2.3'", ->
+      v = new Version '1.2.3'
+      assert.eq v.major, 1, "major"
+      assert.eq v.minor, 2, "minor"
+      assert.eq v.patch, 3, "patch"
+
+    test "new Version major: 9, minor: 8, patch: 7", ->
+      v = new Version major: 9, minor: 8, patch: 7
+      assert.eq v.major, 9, "major"
+      assert.eq v.minor, 8, "minor"
+      assert.eq v.patch, 7, "patch"
+
+  combine: ->
+    version123 = new Version '1.2.3'
+    test "basic"            -> assert.eq '1.2.3'        version123.combine()
+    test "with dev-major"   -> assert.eq '1+9.2+8.3+7'  version123.combine devMajor
+    test "with dev-minor"   -> assert.eq '1.2+8.3+7'    version123.combine devMinor
+    test "with dev-patch"   -> assert.eq '1.2.3+7'      version123.combine devPatch
+
+  bump: ->
+    version123 = new Version '1.2.3'
+    test "basic"            -> assert.eq '1.2.4'  version123.bump().toString()
+    test "with dev-major"   -> assert.eq '2.0.0'  version123.bump(devMajor).toString()
+    test "with dev-minor"   -> assert.eq '1.3.0'  version123.bump(devMinor).toString()
+    test "with dev-patch"   -> assert.eq '1.2.4'  version123.bump(devPatch).toString()
+
+  misc: ->
+    test "new Version('1.2.3').toString()", ->
+      assert.eq
+        new Version '1.2.3'
+        .toString()
+        '1.2.3'

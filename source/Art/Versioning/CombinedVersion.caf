@@ -1,0 +1,48 @@
+import &ArtStandardLib
+&Version
+
+class CombinedVersion extends &ArtClassSystem.BaseClass
+
+  constructor: (v) ->
+    @_release = @_development = null
+    if isString v
+      @_release     = new Version v
+      @_development = new Version
+    else if isPlainObject v
+      @_release     = new Version v.release
+      @_development = new Version v.development
+
+  toString: -> @nextReleaseVersion
+
+  @getter
+    :release
+    :development
+    version:            -> @release.toString()
+    combined:           -> @release.combine @development
+    nextReleaseVersion: -> @release.bump @development
+
+    released: ->
+      new CombinedVersion
+        release: @nextReleaseVersion
+        development: new Version
+
+    majorBumpped: ->
+      new CombinedVersion
+        release: @release
+        development: @development.bump major: 1
+
+    minorBumpped: ->
+      new CombinedVersion
+        release: @release
+        development: @development.bump minor: 1
+
+    patchBumpped: ->
+      new CombinedVersion
+        release: @release
+        development: @development.bump patch: 1
+
+    inspectedObjects: -> toInspectedObjects
+      release:      @release
+      development:  @development
+      version:      @version
+      combined:     @combined

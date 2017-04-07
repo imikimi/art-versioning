@@ -1,2 +1,2 @@
-# art-versioning
-NPM Semantic Versioning - with dev-versions
+# ArtVersioning
+NPM semantic versioning with development versions

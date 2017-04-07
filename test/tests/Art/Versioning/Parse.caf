@@ -1,0 +1,13 @@
+
+{parse} = Neptune.Art.Versioning
+
+suite: ->
+  test "parse '0.0.1'", ->
+    assert.eq
+      parse '0.0.1'
+      major: 0, minor: 0, patch: 1
+
+  test "parse '1.2.3'", ->
+    assert.eq
+      parse '1.2.3'
+      major: 1, minor: 2, patch: 3
