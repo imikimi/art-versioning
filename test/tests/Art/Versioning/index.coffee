@@ -3,7 +3,5 @@
 
 module.exports = require './namespace'
 .addModules
-  Combine:   require './Combine'  
-  Normalize: require './Normalize'
-  Parse:     require './Parse'    
-  Version:   require './Version'  
+  CombinedVersion: require './CombinedVersion'
+  Version:         require './Version'        

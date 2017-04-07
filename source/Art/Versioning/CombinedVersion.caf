@@ -3,16 +3,17 @@ import &ArtStandardLib
 
 class CombinedVersion extends &ArtClassSystem.BaseClass
 
-  constructor: (v) ->
+  constructor: (a, b) ->
+    super
     @_release = @_development = null
-    if isString v
-      @_release     = new Version v
-      @_development = new Version
-    else if isPlainObject v
-      @_release     = new Version v.release
-      @_development = new Version v.development
+    if isString a
+      @_release     = new Version a
+      @_development = new Version b
+    else if isPlainObject a
+      @_release     = new Version a.release
+      @_development = new Version a.development
 
-  toString: -> @nextReleaseVersion
+  toString: -> @combined
 
   @getter
     :release
@@ -26,23 +27,17 @@ class CombinedVersion extends &ArtClassSystem.BaseClass
         release: @nextReleaseVersion
         development: new Version
 
-    majorBumpped: ->
-      new CombinedVersion
-        release: @release
-        development: @development.bump major: 1
-
-    minorBumpped: ->
-      new CombinedVersion
-        release: @release
-        development: @development.bump minor: 1
-
-    patchBumpped: ->
-      new CombinedVersion
-        release: @release
-        development: @development.bump patch: 1
+    majorBump: -> @bump major: 1
+    minorBump: -> @bump minor: 1
+    patchBump: -> @bump patch: 1
 
     inspectedObjects: -> toInspectedObjects
       release:      @release
       development:  @development
       version:      @version
       combined:     @combined
+
+  bump: (bumpMap) ->
+    new CombinedVersion
+      release: @release
+      development: @development.bump bumpMap

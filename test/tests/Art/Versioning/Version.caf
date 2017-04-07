@@ -1,9 +1,10 @@
 
 {Version} = Neptune.Art.Versioning
 
-devMajor = major: 9, minor: 8, patch: 7
-devMinor = major: 0, minor: 8, patch: 7
-devPatch = major: 0, minor: 0, patch: 7
+devMajor = major: 9  minor: 8  patch: 7
+devMinor = major: 0  minor: 8  patch: 7
+devPatch = major: 0  minor: 0  patch: 7
+devEmpty = major: 0  minor: 0  patch: 0
 
 suite:
   constructors: ->
@@ -31,6 +32,7 @@ suite:
     test "with dev-major"   -> assert.eq '1+9.2+8.3+7'  version123.combine devMajor
     test "with dev-minor"   -> assert.eq '1.2+8.3+7'    version123.combine devMinor
     test "with dev-patch"   -> assert.eq '1.2.3+7'      version123.combine devPatch
+    test "with dev-empty"   -> assert.eq '1.2.3'        version123.combine devEmpty
 
   bump: ->
     version123 = new Version '1.2.3'
@@ -38,6 +40,7 @@ suite:
     test "with dev-major"   -> assert.eq '2.0.0'  version123.bump(devMajor).toString()
     test "with dev-minor"   -> assert.eq '1.3.0'  version123.bump(devMinor).toString()
     test "with dev-patch"   -> assert.eq '1.2.4'  version123.bump(devPatch).toString()
+    test "with dev-empty"   -> assert.eq '1.2.3'  version123.bump(devEmpty).toString()
 
   misc: ->
     test "new Version('1.2.3').toString()", ->
